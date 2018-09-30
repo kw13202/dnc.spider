@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnc.spider", "dnc.spider\dnc.spider.csproj", "{0D5223C9-EE96-42DA-BF1D-73C0389549EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnc.spider", "dnc.spider\dnc.spider.csproj", "{0D5223C9-EE96-42DA-BF1D-73C0389549EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnc.spider.webapi", "dnc.spider.webapi\dnc.spider.webapi.csproj", "{97315C2E-CD39-45A1-8A6C-B21ADCB45AB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnc.spider.helper", "dnc.spider.helper\dnc.spider.helper.csproj", "{31FA66BF-67C2-4EEB-B95E-D2DFCA9A6CE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{0D5223C9-EE96-42DA-BF1D-73C0389549EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D5223C9-EE96-42DA-BF1D-73C0389549EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D5223C9-EE96-42DA-BF1D-73C0389549EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97315C2E-CD39-45A1-8A6C-B21ADCB45AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97315C2E-CD39-45A1-8A6C-B21ADCB45AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97315C2E-CD39-45A1-8A6C-B21ADCB45AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97315C2E-CD39-45A1-8A6C-B21ADCB45AB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31FA66BF-67C2-4EEB-B95E-D2DFCA9A6CE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31FA66BF-67C2-4EEB-B95E-D2DFCA9A6CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31FA66BF-67C2-4EEB-B95E-D2DFCA9A6CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31FA66BF-67C2-4EEB-B95E-D2DFCA9A6CE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

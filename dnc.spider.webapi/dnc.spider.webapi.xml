@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>dnc.spider.webapi</name>
+    </assembly>
+    <members>
+        <member name="T:dnc.spider.webapi.QuartzFactory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:dnc.spider.webapi.QuartzFactory.StartSpider">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:dnc.spider.webapi.SpiderJob">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:dnc.spider.webapi.SpiderJob.Execute(Quartz.IJobExecutionContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
