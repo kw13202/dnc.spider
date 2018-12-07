@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using dnc.efcontext;
+using dnc.model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,21 +16,23 @@ using Microsoft.Extensions.Options;
 using Quartz;
 using Quartz.Impl;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.EntityFrameworkCore;
 
 namespace dnc.spider.webapi
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<EfContext>(options => options.UseSqlite(Configuration.GetConnectionString("spiderConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSwaggerGen(x =>
             {
@@ -47,8 +51,34 @@ namespace dnc.spider.webapi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory, 
+            IApplicationLifetime lifetime, 
+            IServiceProvider container)
         {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
+
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<EfContext>();
+                if (context.Database.EnsureCreated())
+                {
+                    if (!context.Goods.Any())
+                    {
+                        var goodList = new List<Goods>()
+                        {
+                            new Goods(){ GoodsCode = "7254027"},
+                            new Goods(){ GoodsCode = "5008395"},
+                        };
+                        context.Goods.AddRange(goodList);
+                        context.SaveChanges();
+                    }
+                }
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -64,6 +94,10 @@ namespace dnc.spider.webapi
             });
 
             app.UseMvc();
+
+            //var quartz = new QuartzStartup(container);
+            //lifetime.ApplicationStarted.Register(quartz.Start);
+            //lifetime.ApplicationStopping.Register(quartz.Stop);
 
         }
     }

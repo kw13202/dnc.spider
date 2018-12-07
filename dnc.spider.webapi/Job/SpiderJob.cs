@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dnc.efcontext;
 using dnc.spider.helper;
+using Microsoft.EntityFrameworkCore;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using Quartz;
+using SQLitePCL;
 
 namespace dnc.spider.webapi
 {
@@ -14,7 +17,15 @@ namespace dnc.spider.webapi
     /// </summary>
     public class SpiderJob : IJob
     {
-        private ChromeDriverHelper chromeHelper = new ChromeDriverHelper(new ChromeDriverOption()
+        //private readonly EfContext _context;
+
+        //public SpiderJob(EfContext context)
+        //{
+        //    _context = context;
+        //}
+
+
+        private readonly ChromeDriverHelper chromeHelper = new ChromeDriverHelper(new ChromeDriverOption()
         {
             ChromeDriverDirectory = AppDomain.CurrentDomain.BaseDirectory,
         });
@@ -25,7 +36,7 @@ namespace dnc.spider.webapi
         /// <returns></returns>
         public Task Execute(IJobExecutionContext context)
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
                 //遇到最坑的地方：2.4.2的ChromeDriver必须匹配69以上的chrome，低版本67直接不行
                 //var driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
@@ -35,26 +46,32 @@ namespace dnc.spider.webapi
                     if(chromeHelper.IsRuning)
                         return;
 
-                    var links = new List<string>()
-                    {
-                        "https://item.jd.com/7254027.html",
-                        "https://item.jd.com/5008395.html"
-                    };
+                    //var list = await _context.Goods.AsNoTracking().ToListAsync();
+                    //if (list != null && list.Count > 0)
+                    //{
 
-                    chromeHelper.LoadCompleted += (sender, args) =>
-                    {
-                        var driver = sender as ChromeDriver;
-                        var title = driver.FindElement(By.CssSelector(".sku-name"));
-                        var price = driver.FindElement(By.CssSelector(".p-price > .price"));
-                        var plusPrice = driver.FindElement(By.CssSelector(".p-price-plus > .price"));
+                    //}
 
-                        Console.WriteLine($"Title:{title?.Text}");
-                        Console.WriteLine($"Price:{price?.Text}");
-                        Console.WriteLine($"PlusPrice:{plusPrice?.Text}");
-                        Console.WriteLine("");
+                    //var links = new List<string>()
+                    //{
+                    //    "https://item.jd.com/7254027.html",
+                    //    "https://item.jd.com/5008395.html"
+                    //};
 
-                    };
-                    chromeHelper.GoToUrl(links);
+                    //chromeHelper.LoadCompleted += (sender, args) =>
+                    //{
+                    //    var driver = sender as ChromeDriver;
+                    //    var title = driver.FindElement(By.CssSelector(".sku-name"));
+                    //    var price = driver.FindElement(By.CssSelector(".p-price > .price"));
+                    //    var plusPrice = driver.FindElement(By.CssSelector(".p-price-plus > .price"));
+
+                    //    Console.WriteLine($"Title:{title?.Text}");
+                    //    Console.WriteLine($"Price:{price?.Text}");
+                    //    Console.WriteLine($"PlusPrice:{plusPrice?.Text}");
+                    //    Console.WriteLine("");
+
+                    //};
+                    //chromeHelper.GoToUrl(links);
 
                     //foreach (var item in links)
                     //{
