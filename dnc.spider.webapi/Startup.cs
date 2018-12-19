@@ -24,6 +24,10 @@ namespace dnc.spider.webapi
     {
         public IConfiguration Configuration { get; set; }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,8 +36,11 @@ namespace dnc.spider.webapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // 设置efcore连接字符串
             services.AddDbContext<EfContext>(options => options.UseSqlite(Configuration.GetConnectionString("spiderConnection")));
+            // 设置MVC版本号
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // 设置Swagger
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new Info()
@@ -47,23 +54,19 @@ namespace dnc.spider.webapi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 x.IncludeXmlComments(xmlPath);
             });
-            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();//注册ISchedulerFactory的实例。
+            //注册ISchedulerFactory的实例
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, 
-            IHostingEnvironment env, 
-            ILoggerFactory loggerFactory, 
-            IApplicationLifetime lifetime, 
-            IServiceProvider container)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
 
-
+            #region 初始化数据库
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<EfContext>();
+                context.Database.EnsureDeleted();
                 if (context.Database.EnsureCreated())
                 {
                     if (!context.Goods.Any())
@@ -77,28 +80,24 @@ namespace dnc.spider.webapi
                         context.SaveChanges();
                     }
                 }
-            }
+            } 
+            #endregion
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            // 使用静态文件
             app.UseStaticFiles();
-
+            // 使用Swagger
             app.UseSwagger();
-
+            // 使用SwaggerUI
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
+            // 使用MVC
             app.UseMvc();
-
-            //var quartz = new QuartzStartup(container);
-            //lifetime.ApplicationStarted.Register(quartz.Start);
-            //lifetime.ApplicationStopping.Register(quartz.Stop);
-
         }
     }
 }

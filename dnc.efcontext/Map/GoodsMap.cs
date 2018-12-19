@@ -18,16 +18,16 @@ namespace dnc.efcontext.Map
             builder.HasKey(x => x.GoodsCode);
 
             //字段
-            builder.Property(x => x.GoodsCode).HasMaxLength(100);
-            builder.Property(x => x.GoodsName).HasMaxLength(500);
-            builder.Property(x => x.LowestPrice);
-            builder.Property(x => x.LowestPriceTime);
-            builder.Property(x => x.CurPrice);
-            builder.Property(x => x.PlusPrice);
-            builder.Property(x => x.DiscountPrice);
-            builder.Property(x => x.DiscountDesc);
-            builder.Property(x => x.SpiderTime);
-            builder.Property(x => x.CreateTime);
+            builder.Property(x => x.GoodsCode).HasColumnType("nvarchar(100)");
+            builder.Property(x => x.GoodsName).HasColumnType("nvarchar(500)");
+            builder.Property(x => x.LowestPrice).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.LowestPriceTime).HasColumnType("datetime");
+            builder.Property(x => x.CurPrice).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.PlusPrice).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.DiscountPrice).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.DiscountDesc).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.SpiderTime).HasColumnType("datetime");
+            builder.Property(x => x.CreateTime).HasColumnType("datetime");
 
             //索引
 

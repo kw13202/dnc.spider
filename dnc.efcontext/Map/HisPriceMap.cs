@@ -18,12 +18,12 @@ namespace dnc.efcontext.Map
             builder.HasKey(x => x.Id);
 
             //字段
-            builder.Property(x => x.GoodsCode).HasMaxLength(100);
-            builder.Property(x => x.CurPrice);
-            builder.Property(x => x.PlusPrice);
-            builder.Property(x => x.DiscountPrice);
-            builder.Property(x => x.DiscountDesc);
-            builder.Property(x => x.SpiderTime);
+            builder.Property(x => x.GoodsCode).HasColumnType("nvarchar(100)");
+            builder.Property(x => x.CurPrice).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.PlusPrice).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.DiscountPrice).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.DiscountDesc).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.SpiderTime).HasColumnType("datetime");
 
             //索引
 

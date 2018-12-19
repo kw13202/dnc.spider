@@ -10,4 +10,8 @@
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.42.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\dnc.spider.helper\dnc.spider.helper.csproj" />
+  </ItemGroup>
+
 </Project>
