@@ -12,6 +12,7 @@ using SQLitePCL;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 using System.Text;
+using dnc.model;
 
 namespace dnc.spider.webapi
 {
@@ -44,7 +45,7 @@ namespace dnc.spider.webapi
             try
             {
                 var list = await ctx.Goods.AsNoTracking().ToListAsync();
-                
+                var notifyList = new List<Goods>();
                 if (list != null && list.Count > 0)
                 {
                     foreach(var item in list)
@@ -152,6 +153,17 @@ namespace dnc.spider.webapi
 
                     }
                 }
+
+                if (notifyList != null && notifyList.Count > 0)
+                {
+
+                }
+#if DEBUG
+                else
+                {
+
+                }
+#endif
             }
             catch (Exception ex)
             {
