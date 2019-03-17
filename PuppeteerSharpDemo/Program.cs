@@ -27,8 +27,8 @@ namespace PuppeteerSharpDemo
             // 获取访问内容
             var htmlString = await page.GetContentAsync();
             // 保存
-            string basePath = Directory.GetCurrentDirectory();
-            using (FileStream fs = new FileStream($"{basePath}\\jd_html.txt", FileMode.Create, FileAccess.Write, FileShare.Write))
+            string basePath = AppContext.BaseDirectory;
+            using (FileStream fs = new FileStream($"{basePath}{Path.DirectorySeparatorChar}jd_html.txt", FileMode.Create, FileAccess.Write, FileShare.Write))
             {
                 byte[] content = Encoding.UTF8.GetBytes(htmlString);
                 await fs.WriteAsync(content, 0, content.Length);
