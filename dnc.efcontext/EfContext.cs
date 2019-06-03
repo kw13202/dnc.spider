@@ -11,11 +11,6 @@ namespace dnc.efcontext
 {
     public class EfContext : DbContext
     {
-        public EfContext()
-        {
-
-        }
-
         public EfContext(DbContextOptions<EfContext> options) : base(options)
         {
             
@@ -44,5 +39,6 @@ namespace dnc.efcontext
 
         public DbSet<Goods> Goods { get; set; }
         public DbSet<HisPrice> HisPrices { get; set; }
+        public DbSet<QuartzInfo> QuartzInfos { get; set; }
     }
 }

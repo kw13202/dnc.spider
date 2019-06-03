@@ -9,21 +9,22 @@ namespace dnc.spider.webapi
 {
     public class JobFactory : IJobFactory
     {
-        protected readonly IServiceProvider Container;
+        private readonly IServiceProvider _serviceProvider;
 
-        public JobFactory(IServiceProvider container)
+        public JobFactory(IServiceProvider serviceProvider)
         {
-            Container = container;
+            _serviceProvider = serviceProvider;
         }
 
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
-            return Container.GetService(bundle.JobDetail.JobType) as IJob;
+            var job = _serviceProvider.GetService(bundle.JobDetail.JobType) as IJob;
+            return job;
         }
 
         public void ReturnJob(IJob job)
         {
-            (job as IDisposable)?.Dispose();
         }
     }
+
 }

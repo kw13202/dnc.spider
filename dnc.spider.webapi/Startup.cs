@@ -17,6 +17,8 @@ using Quartz;
 using Quartz.Impl;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Quartz.Spi;
 
 namespace dnc.spider.webapi
 {
@@ -36,8 +38,36 @@ namespace dnc.spider.webapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            // 添加日志Service
+            services.AddLogging();
+
             // 设置efcore连接字符串
             services.AddDbContext<EfContext>(options => options.UseSqlite(Configuration.GetConnectionString("spiderConnection")));
+
+            services.AddSingleton<IJobFactory, JobFactory>();
+            services.AddSingleton(provider =>
+            {
+                StdSchedulerFactory factory = new StdSchedulerFactory();
+                var scheduler = factory.GetScheduler().ConfigureAwait(false).GetAwaiter().GetResult();
+
+                scheduler.JobFactory = provider.GetService<IJobFactory>();
+
+                return scheduler;
+            });
+            // 添加自定义的HostedService
+            services.AddHostedService<InitHostedService>();
+            services.AddHostedService<DBHostedService>();
+            services.AddHostedService<QuartzHostedService>();
+            services.AddSingleton<SpiderJob, SpiderJob>();
+
+
             // 设置MVC版本号
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // 设置Swagger
@@ -54,34 +84,11 @@ namespace dnc.spider.webapi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 x.IncludeXmlComments(xmlPath);
             });
-            //注册ISchedulerFactory的实例
-            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-
-            #region 初始化数据库
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<EfContext>();
-                context.Database.EnsureDeleted();
-                if (context.Database.EnsureCreated())
-                {
-                    if (!context.Goods.Any())
-                    {
-                        var goodList = new List<Goods>()
-                        {
-                            new Goods(){ GoodsCode = "7254027"},
-                            new Goods(){ GoodsCode = "5008395"},
-                        };
-                        context.Goods.AddRange(goodList);
-                        context.SaveChanges();
-                    }
-                }
-            } 
-            #endregion
 
             if (env.IsDevelopment())
             {

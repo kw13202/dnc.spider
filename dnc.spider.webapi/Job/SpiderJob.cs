@@ -13,6 +13,10 @@ using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 using System.Text;
 using dnc.model;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using System.IO;
+using AngleSharp.Html.Parser;
 
 namespace dnc.spider.webapi
 {
@@ -21,18 +25,17 @@ namespace dnc.spider.webapi
     /// </summary>
     public class SpiderJob : IJob
     {
-        //private readonly EfContext _context;
+        private readonly ILogger _logger;
+        private readonly IConfiguration _config;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        //public SpiderJob(EfContext context)
-        //{
-        //    _context = context;
-        //}
-
-
-        private readonly ChromeDriverHelper chromeHelper = new ChromeDriverHelper(new ChromeDriverOption()
+        public SpiderJob(ILogger<SpiderJob> logger, IConfiguration config, IServiceScopeFactory scopeFactory)
         {
-            ChromeDriverDirectory = AppDomain.CurrentDomain.BaseDirectory,
-        });
+            _logger = logger;
+            _config = config;
+            _scopeFactory = scopeFactory;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -40,258 +43,175 @@ namespace dnc.spider.webapi
         /// <returns></returns>
         public async Task Execute(IJobExecutionContext context)
         {
-            var driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
-            var ctx = new EfContext();
-            try
+            _logger.LogInformation(string.Format("[{0:yyyy-MM-dd hh:mm:ss:ffffff}]任务执行！", DateTime.Now));
+
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var list = await ctx.Goods.AsNoTracking().ToListAsync();
-                var notifyList = new List<Goods>();
-                if (list != null && list.Count > 0)
+                var _context = scope.ServiceProvider.GetRequiredService<EfContext>();
+                // 新建页面
+                var page = await CacheManager.browser.NewPageAsync();
+
+                try
                 {
-                    foreach(var item in list)
+                    var list = await _context.Goods.ToListAsync();
+                    if (list != null && list.Count > 0)
                     {
-                        driver.Navigate().GoToUrl($"http://item.jd.com/{item.GoodsCode}.html");
-
-                        StringBuilder sb = new StringBuilder();
-                        string goodsName = GetElementValue<string>(driver.FindElements(By.CssSelector(".sku-name")));
-                        decimal curPrice = GetElementValue<decimal>(driver.FindElements(By.CssSelector(".p-price > .price")));
-                        Nullable<decimal> plusPrice = GetDecimalElementValue(driver.FindElements(By.CssSelector(".p-price-plus > .price")));
-                        string discountType = GetElementValue<string>(driver.FindElements(By.CssSelector(".J-prom .hl_red_bg")));
-                        string discountDesc = GetElementValue<string>(driver.FindElements(By.CssSelector(".J-prom .hl_red")));
-                        decimal? discoutPrice = null;
-
-                        switch (discountType)
+                        foreach (var item in list)
                         {
-                            case "满减":
+                            // 页面访问
+                            await page.GoToAsync($"https://item.jd.com/{item.GoodsCode}.html");
+                            // 获取访问内容
+                            var htmlString = await page.GetContentAsync();
+                            // 保存
+                            string basePath = AppContext.BaseDirectory;
+                            using (FileStream fs = new FileStream($"{basePath}{Path.DirectorySeparatorChar}jd_{item.GoodsCode}.txt", FileMode.Create, FileAccess.Write, FileShare.Write))
+                            {
+                                byte[] content = Encoding.UTF8.GetBytes(htmlString);
+                                await fs.WriteAsync(content, 0, content.Length);
+                            }
+
+                            string text = await File.ReadAllTextAsync($"{basePath}{Path.DirectorySeparatorChar}jd_{item.GoodsCode}.txt", Encoding.UTF8);
+
+                            var parser = new HtmlParserHelper(htmlString);
+                            string goodsName = parser.GetText(".sku-name");
+                            decimal? curPrice = parser.GetDecimal(".p-price > .price");
+                            decimal? plusPrice = parser.GetDecimal(".p-price-plus > .price");
+                            List<string> discountTypeList = parser.GetTextList(".J-prom .hl_red_bg");
+                            List<string> discountDescList = parser.GetTextList(".J-prom .hl_red");
+                            decimal? discoutPrice = null;
+
+                            if (discountTypeList != null && discountTypeList.Count > 0 && discountDescList != null && discountDescList.Count > 0)
+                            {
+                                if (discountTypeList.Count == discountDescList.Count)
                                 {
-                                    Regex reg = new Regex(@"满\s*([\d\.]+)\s*元减\s*([\d\.]+)\s*元*");
-                                    var matchs = reg.Matches(discountDesc);
-                                    foreach (Match match in matchs)
+                                    int len = discountTypeList.Count;
+                                    for (int i = 0; i < len; i++)
                                     {
-                                        decimal num1 = Convert.ToDecimal(match.Groups[1].Value);
-                                        decimal num2 = Convert.ToDecimal(match.Groups[2].Value);
-                                        if (curPrice >= num1)
+                                        string discountType = discountTypeList[i];
+                                        string discountDesc = discountDescList[i];
+
+                                        switch (discountType)
                                         {
-                                            discoutPrice = curPrice - num2;
-                                            sb.AppendLine($"{match.Groups[0].Value}({curPrice}-{num2}={discoutPrice})");
-                                        } 
-                                        else
-                                        {
-                                            sb.AppendLine($"{match.Groups[0].Value}(需凑单)");
+                                            case "满减":
+                                                #region 满减
+                                                {
+                                                    Regex reg = new Regex(@"满\s*([\d\.]+)\s*元减\s*([\d\.]+)\s*元*");
+                                                    var matchs = reg.Matches(discountDesc);
+                                                    foreach (Match match in matchs)
+                                                    {
+                                                        decimal num1 = Convert.ToDecimal(match.Groups[1].Value);
+                                                        decimal num2 = Convert.ToDecimal(match.Groups[2].Value);
+                                                        if (curPrice >= num1)
+                                                        {
+                                                            discoutPrice = curPrice - num2;
+                                                            //sb.AppendLine($"{match.Groups[0].Value}({curPrice}-{num2}={discoutPrice})");
+                                                        }
+                                                        else
+                                                        {
+                                                            //sb.AppendLine($"{match.Groups[0].Value}(需凑单)");
+                                                        }
+                                                    }
+                                                }
+                                                #endregion
+                                                break;
+                                            default:
+                                                #region 其他
+                                                {
+                                                    _logger.LogWarning("未处理的优惠类型");
+                                                    using (FileStream fs = new FileStream($"{basePath}{Path.DirectorySeparatorChar}jd_{item.GoodsCode}.txt", FileMode.Create, FileAccess.Write, FileShare.Write))
+                                                    {
+                                                        byte[] content = Encoding.UTF8.GetBytes(htmlString);
+                                                        await fs.WriteAsync(content, 0, content.Length);
+                                                    }
+                                                }
+                                                #endregion
+                                                break;
                                         }
                                     }
                                 }
-                                break;
-                        }
-                        // 判断最低价
-                        decimal min = curPrice;
-                        if (plusPrice.HasValue)
-                        {
-                            min = Math.Min(curPrice, plusPrice.Value);
-                        }
-                        if (discoutPrice.HasValue)
-                        {
-                            min = Math.Min(min, discoutPrice.Value);
-                        }
-                        if (item.LowestPrice.HasValue)
-                        {
-                            if (item.LowestPrice.Value <= min)
+                                else
+                                {
+                                    _logger.LogWarning("优惠类型与描述不匹配");
+                                }
+                            } 
+                            else
                             {
-                                item.LowestPrice = min;
-                                item.LowestPriceTime = DateTime.Now;
+                                _logger.LogDebug("没有优惠");
                             }
-                        }
-                        else
-                        {
-                            item.LowestPrice = min;
-                            item.LowestPriceTime = DateTime.Now;
-                        }
 
-                        item.GoodsName = goodsName;
-                        item.CurPrice = curPrice;
-                        item.PlusPrice = plusPrice;
-                        item.DiscountPrice = discoutPrice;
-                        item.SpiderTime = DateTime.Now;
-                        ctx.Goods.Attach(item);
-                        ctx.Entry(item).State = EntityState.Modified;
 
-                        
+                            item.GoodsName = goodsName;
+                            item.CurPrice = curPrice.HasValue ? curPrice.Value : 0;
+                            item.PlusPrice = plusPrice.HasValue ? plusPrice.Value : 0;
+                            item.SpiderTime = DateTime.Now;
 
-                        var hisPrice = await ctx.HisPrices.FirstOrDefaultAsync(x => x.GoodsCode == item.GoodsCode);
-                        if (hisPrice == null)
-                        {
-                            ctx.HisPrices.Add(new model.HisPrice()
+
+                            var hisPrice = await _context.HisPrices.OrderByDescending(x => x.SpiderTime).FirstOrDefaultAsync(x => item.GoodsCode.Equals(x.GoodsCode));
+                            if (hisPrice != null)
                             {
-                                GoodsCode = item.GoodsCode,
-                                CurPrice = curPrice,
-                                PlusPrice = plusPrice,
-                                DiscountPrice = discoutPrice,
-                                DiscountDesc = discountDesc,
-                                SpiderTime = item.SpiderTime
-                            });
-                        }
-                        else
-                        {
-                            if (hisPrice.CurPrice != curPrice || hisPrice.PlusPrice != plusPrice || hisPrice.DiscountPrice != discoutPrice)
+                                hisPrice.CurPrice = curPrice.HasValue ? curPrice.Value : 0;
+                                hisPrice.PlusPrice = plusPrice.HasValue ? plusPrice.Value : 0;
+                                hisPrice.SpiderTime = DateTime.Now;
+                            }
+                            else
                             {
-                                ctx.HisPrices.Add(new model.HisPrice()
+                                await _context.HisPrices.AddAsync(new HisPrice()
                                 {
                                     GoodsCode = item.GoodsCode,
-                                    CurPrice = curPrice,
-                                    PlusPrice = plusPrice,
-                                    DiscountPrice = discoutPrice,
-                                    DiscountDesc = discountDesc,
-                                    SpiderTime = item.SpiderTime
+                                    CurPrice = curPrice.HasValue ? curPrice.Value : 0,
+                                    PlusPrice = plusPrice.HasValue ? plusPrice.Value : 0,
+                                    SpiderTime = DateTime.Now,
                                 });
                             }
+
+                            await _context.SaveChangesAsync();
+
+                            //if (!string.IsNullOrWhiteSpace(discountType))
+                            //{
+                            //    switch (discountType)
+                            //    {
+                            //        case "满减":
+                            //            {
+                            //                Regex reg = new Regex(@"满\s*([\d\.]+)\s*元减\s*([\d\.]+)\s*元*");
+                            //                var matchs = reg.Matches(discountDesc);
+                            //                foreach (Match match in matchs)
+                            //                {
+                            //                    decimal num1 = Convert.ToDecimal(match.Groups[1].Value);
+                            //                    decimal num2 = Convert.ToDecimal(match.Groups[2].Value);
+                            //                    if (curPrice >= num1)
+                            //                    {
+                            //                        discoutPrice = curPrice - num2;
+                            //                        //sb.AppendLine($"{match.Groups[0].Value}({curPrice}-{num2}={discoutPrice})");
+                            //                    }
+                            //                    else
+                            //                    {
+                            //                        //sb.AppendLine($"{match.Groups[0].Value}(需凑单)");
+                            //                    }
+                            //                }
+                            //            }
+                            //            break;
+                            //    }
+                            //}
+
+
+                            _logger.LogDebug(goodsName);
+                            _logger.LogDebug($"goodsName:{goodsName},curPrice:{(curPrice.HasValue ? curPrice.Value : 0)},plusPrice:{(plusPrice.HasValue ? plusPrice.Value : 0)}");
                         }
-                        await ctx.SaveChangesAsync();
-
-                        //var titleList = driver.FindElements(By.CssSelector(".sku-name"));
-                        //var price = driver.FindElement(By.CssSelector(".p-price > .price"));
-                        //var plusPrice = driver.FindElement(By.CssSelector(".p-price-plus > .price"));
-
                     }
                 }
-
-                if (notifyList != null && notifyList.Count > 0)
+                catch (Exception ex)
                 {
-
+                    _logger.LogError("", ex);
+                    throw;
                 }
-#if DEBUG
-                else
+                finally
                 {
-
+                    if (page != null)
+                        await page.CloseAsync();
                 }
-#endif
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                throw;
-            }
-            finally
-            {
-                if (ctx != null)
-                    ctx.Dispose();
-                if (driver != null)
-                    driver.Quit();
-            }
-
-            //return Task.Run(async () =>
-            //{
-            //    //遇到最坑的地方：2.4.2的ChromeDriver必须匹配69以上的chrome，低版本67直接不行
-            //    //var driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
-            //    try
-            //    {
-
-            //        if(chromeHelper.IsRuning)
-            //            return;
-
-            //        //var list = await _context.Goods.AsNoTracking().ToListAsync();
-            //        //if (list != null && list.Count > 0)
-            //        //{
-
-            //        //}
-
-            //        //var links = new List<string>()
-            //        //{
-            //        //    "https://item.jd.com/7254027.html",
-            //        //    "https://item.jd.com/5008395.html"
-            //        //};
-
-            //        //chromeHelper.LoadCompleted += (sender, args) =>
-            //        //{
-            //        //    var driver = sender as ChromeDriver;
-            //        //    var title = driver.FindElement(By.CssSelector(".sku-name"));
-            //        //    var price = driver.FindElement(By.CssSelector(".p-price > .price"));
-            //        //    var plusPrice = driver.FindElement(By.CssSelector(".p-price-plus > .price"));
-
-            //        //    Console.WriteLine($"Title:{title?.Text}");
-            //        //    Console.WriteLine($"Price:{price?.Text}");
-            //        //    Console.WriteLine($"PlusPrice:{plusPrice?.Text}");
-            //        //    Console.WriteLine("");
-
-            //        //};
-            //        //chromeHelper.GoToUrl(links);
-
-            //        //foreach (var item in links)
-            //        //{
-            //        //    driver.Navigate().GoToUrl(item);
-
-            //        //    var title = driver.FindElement(By.CssSelector(".sku-name"));
-            //        //    var price = driver.FindElement(By.CssSelector(".p-price > .price"));
-            //        //    var plusPrice = driver.FindElement(By.CssSelector(".p-price-plus > .price"));
-
-
-            //        //    Console.WriteLine($"Title:{title?.Text}");
-            //        //    Console.WriteLine($"Price:{price?.Text}");
-            //        //    Console.WriteLine($"PlusPrice:{plusPrice?.Text}");
-            //        //    Console.WriteLine("");
-            //        //}
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Console.WriteLine(e);
-            //        throw;
-            //    }
-            //    finally
-            //    {
-            //        //driver.Quit();
-            //    }
-            //});
 
         }
 
-
-        private T GetElementValue<T>(IReadOnlyCollection<IWebElement> list)
-        {
-            if (list != null  && list.Count > 0)
-            {
-                var ele = list.FirstOrDefault();
-                if (ele != null)
-                {
-                    return (T)Convert.ChangeType(ele.Text, typeof(T));
-                }
-                else
-                {
-                    return default(T);
-                }
-            }
-            else
-            {
-                return default(T);
-            }
-        }
-
-        public decimal? GetDecimalElementValue(IReadOnlyCollection<IWebElement> list)
-        {
-            if (list != null && list.Count > 0)
-            {
-                var ele = list.FirstOrDefault();
-                if (ele != null)
-                {
-                    var txt = ele.Text;
-                    // 有时会有特殊符号在里面
-
-                    if (string.IsNullOrWhiteSpace(txt))
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return MatchHelper.getDecimalFirstOrDefault(txt);
-                    }
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
     }
 }

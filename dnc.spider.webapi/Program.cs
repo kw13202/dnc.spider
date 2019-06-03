@@ -14,10 +14,8 @@ namespace dnc.spider.webapi
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
-
-            QuartzFactory.StartSpider();
-
+            var host = CreateWebHostBuilder(args)
+                .Build();
             host.Run();
         }
 
