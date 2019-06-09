@@ -63,9 +63,18 @@ namespace dnc.spider.webapi
             });
             // 添加自定义的HostedService
             services.AddHostedService<InitHostedService>();
-            services.AddHostedService<DBHostedService>();
-            services.AddHostedService<QuartzHostedService>();
             services.AddSingleton<SpiderJob, SpiderJob>();
+
+            // 允许跨域
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()    // 允许所有来源
+                           .AllowAnyHeader()    // 允许所有头
+                           .AllowAnyMethod();   // 允许所有方法
+                });
+            });
 
 
             // 设置MVC版本号
@@ -103,6 +112,8 @@ namespace dnc.spider.webapi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            // 使用跨域，必须在UseMvc之前
+            app.UseCors();
             // 使用MVC
             app.UseMvc();
         }
