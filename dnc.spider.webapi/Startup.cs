@@ -49,7 +49,8 @@ namespace dnc.spider.webapi
             services.AddLogging();
 
             // 设置efcore连接字符串
-            services.AddDbContext<EfContext>(options => options.UseSqlite(Configuration.GetConnectionString("spiderConnection")));
+            //services.AddDbContext<EfContext>(options => options.UseSqlite(Configuration.GetConnectionString("spiderConnection")));
+            services.AddDbContext<EfContext>(options => options.UseSqlServer(Configuration.GetConnectionString("mssqlConn")));
 
             services.AddSingleton<IJobFactory, JobFactory>();
             services.AddSingleton(provider =>
@@ -61,9 +62,11 @@ namespace dnc.spider.webapi
 
                 return scheduler;
             });
-            // 添加自定义的HostedService
-            services.AddHostedService<InitHostedService>();
             services.AddSingleton<SpiderJob, SpiderJob>();
+            services.AddSingleton<ProxyJob, ProxyJob>();
+
+            // 添加单例IOC
+            services.AddTransient<CacheManager>();
 
             // 允许跨域
             services.AddCors(options =>
@@ -93,6 +96,20 @@ namespace dnc.spider.webapi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 x.IncludeXmlComments(xmlPath);
             });
+
+            // 添加HttpClientFactory
+            services.AddHttpClient("proxy", x =>
+            {
+                x.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                x.DefaultRequestHeaders.Add("Accept-Encoding", "");// value gzip, deflate, br
+                x.DefaultRequestHeaders.Add("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
+                x.DefaultRequestHeaders.Add("Cache-Control", "max-age=0");
+                x.DefaultRequestHeaders.Add("Connection", "keep-alive");
+                x.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0");
+            });
+
+            // 添加自定义的HostedService
+            services.AddHostedService<InitHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

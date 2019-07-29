@@ -22,7 +22,7 @@ namespace dnc.efcontext.Map
             builder.Property(x => x.CurPrice).HasColumnType("decimal(8, 2)");
             builder.Property(x => x.PlusPrice).HasColumnType("decimal(8, 2)");
             builder.Property(x => x.DiscountPrice).HasColumnType("decimal(8, 2)");
-            builder.Property(x => x.DiscountDesc).HasColumnType("decimal(8, 2)");
+            builder.Property(x => x.DiscountDesc).HasColumnType("nvarchar(max)");
             builder.Property(x => x.SpiderTime).HasColumnType("datetime");
 
             //索引

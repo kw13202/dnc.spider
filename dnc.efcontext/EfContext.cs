@@ -16,15 +16,16 @@ namespace dnc.efcontext
             
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    var configuration = new ConfigurationBuilder()
+        //        .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+        //        .AddJsonFile("appsettings.json")
+        //        .Build();
 
-            optionsBuilder.UseSqlite(configuration.GetConnectionString("spiderConnection"));
-        }
+        //    optionsBuilder.UseSqlite(configuration.GetConnectionString("spiderConnection"));
+        //    optionsBuilder.UseSqlServer(configuration.GetConnectionString("mssqlConn"));
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,5 +41,6 @@ namespace dnc.efcontext
         public DbSet<Goods> Goods { get; set; }
         public DbSet<HisPrice> HisPrices { get; set; }
         public DbSet<QuartzInfo> QuartzInfos { get; set; }
+        public DbSet<Proxy> Proxy { get; set; }
     }
 }

@@ -37,5 +37,9 @@ namespace dnc.model
         /// 任务名称
         /// </summary>
         public string JobName { get; set; }
+
+        public string Remark { get; set; }
+
+        public bool Enabled { get; set; } = true;
     }
 }

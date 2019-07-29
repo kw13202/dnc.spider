@@ -8,6 +8,12 @@ namespace dnc.spider.webapi
 {
     public class CacheManager
     {
+        public CacheManager()
+        {
+
+        }
+
         public static Browser browser = null;
+        public static bool IsProxyJobRunning = false;
     }
 }

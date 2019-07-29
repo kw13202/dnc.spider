@@ -1,4 +1,5 @@
-﻿using AngleSharp.Html.Dom;
+﻿using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using System;
 using System.Collections.Generic;
@@ -70,6 +71,12 @@ namespace dnc.spider.webapi
             {
                 return null;
             }
+        }
+
+        public IHtmlCollection<IElement> QuerySelectorAll(string selectors)
+        {
+            var list = _document.QuerySelectorAll(selectors);
+            return list;
         }
     }
 }

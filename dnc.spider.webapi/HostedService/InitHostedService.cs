@@ -12,6 +12,7 @@ using dnc.efcontext;
 using dnc.model;
 using Quartz;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace dnc.spider.webapi
 {
@@ -20,38 +21,45 @@ namespace dnc.spider.webapi
         private readonly ILogger _logger;
         private readonly IScheduler _scheduler;
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IConfiguration _configuration;
 
-        public InitHostedService(ILogger<InitHostedService> logger, IScheduler scheduler, IServiceScopeFactory scopeFactory)
+        public InitHostedService(ILogger<InitHostedService> logger, IScheduler scheduler, IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {
             _logger = logger;
             _scheduler = scheduler;
             _scopeFactory = scopeFactory;
+            _configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            #region 无头浏览器初始化
-            try
-            {
-                string downloadPath = Path.Combine(AppContext.BaseDirectory, ".local-chromium");
-                // 这句代码会自动下载无头浏览器
-                var browser = new BrowserFetcher(new BrowserFetcherOptions
-                {
-                    Path = downloadPath
-                });
-                await browser.DownloadAsync(BrowserFetcher.DefaultRevision);
+            var usedPuppeteerSharp = _configuration.GetValue<bool>("UsedPuppeteerSharp", false);
 
-                // 设置启动参数
-                CacheManager.browser = await Puppeteer.LaunchAsync(new LaunchOptions
-                {
-                    Headless = true
-                });
-            }
-            catch (Exception ex)
+            if (usedPuppeteerSharp)
             {
-                _logger.LogError("无头浏览器初始化出错", ex.Message);
+                #region 无头浏览器初始化
+                try
+                {
+                    string downloadPath = Path.Combine(AppContext.BaseDirectory, ".local-chromium");
+                    // 这句代码会自动下载无头浏览器
+                    var browser = new BrowserFetcher(new BrowserFetcherOptions
+                    {
+                        Path = downloadPath
+                    });
+                    await browser.DownloadAsync(BrowserFetcher.DefaultRevision);
+
+                    // 设置启动参数
+                    CacheManager.browser = await Puppeteer.LaunchAsync(new LaunchOptions
+                    {
+                        Headless = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("无头浏览器初始化出错", ex.Message);
+                }
+                #endregion
             }
-            #endregion
 
             var scope = _scopeFactory.CreateScope();
 
@@ -74,6 +82,20 @@ namespace dnc.spider.webapi
                             FullClassName = "dnc.spider.webapi.SpiderJob",
                             JobGroup = "JobGroup1",
                             JobName = "JobName1",
+                            Remark = "京东爬虫",
+                            Enabled = false,
+                        });
+                        _context.Add(new QuartzInfo
+                        {
+                            Guid = Guid.NewGuid().ToString(),
+                            TriggerGroup = "TriggerGroup2",
+                            TriggerName = "TriggerName2",
+                            CronExpression = "0 0 3 * * ? ",// 每天3点执行
+                            FullClassName = "dnc.spider.webapi.ProxyJob",
+                            JobGroup = "JobGroup2",
+                            JobName = "JobName2",
+                            Remark = "代理爬虫",
+                            Enabled = true,
                         });
                         await _context.SaveChangesAsync();
                     }
@@ -100,43 +122,79 @@ namespace dnc.spider.webapi
             #endregion
 
             #region Quartz调度
-            if (CacheManager.browser != null)
+            //if (CacheManager.browser != null)
+            //{
+            //    _logger.LogInformation("开始Quartz调度...");
+            //    try
+            //    {
+            //        // 开启调度器
+            //        await _scheduler.Start(stoppingToken);
+
+            //        var _context = scope.ServiceProvider.GetRequiredService<EfContext>();
+
+            //        var list = await _context.QuartzInfos.AsNoTracking().Where(x => x.Enabled).ToListAsync();
+            //        foreach (var item in list)
+            //        {
+            //            var jobKey = new JobKey(item.JobName, item.JobGroup);
+            //            // 创建触发器
+            //            var trigger = TriggerBuilder.Create()
+            //                                .WithIdentity(item.TriggerName, item.TriggerGroup)
+            //                                .WithCronSchedule(item.CronExpression)
+            //                                .Build();
+
+            //            // 创建任务
+            //            Type type = Type.GetType(item.FullClassName);
+            //            var jobDetail = JobBuilder.Create(type)
+            //                                .WithIdentity(jobKey)
+            //                                .Build();
+
+            //            await _scheduler.ScheduleJob(jobDetail, trigger);
+
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        _logger.LogError("Quartz调度出错", ex.Message);
+            //        throw ex;
+            //    }
+            //}
+            //else
+            //{
+            //    _logger.LogInformation("跳过Quartz调度...");
+            //}
+            _logger.LogInformation("开始Quartz调度...");
+            try
             {
-                _logger.LogInformation("开始Quartz调度...");
-                try
+                // 开启调度器
+                await _scheduler.Start(stoppingToken);
+
+                var _context = scope.ServiceProvider.GetRequiredService<EfContext>();
+
+                var list = await _context.QuartzInfos.AsNoTracking().Where(x => x.Enabled).ToListAsync();
+                foreach (var item in list)
                 {
-                    // 开启调度器
-                    await _scheduler.Start(stoppingToken);
+                    var jobKey = new JobKey(item.JobName, item.JobGroup);
+                    // 创建触发器
+                    var trigger = TriggerBuilder.Create()
+                                        .WithIdentity(item.TriggerName, item.TriggerGroup)
+                                        .WithCronSchedule(item.CronExpression)
+                                        .Build();
 
-                    var _context = scope.ServiceProvider.GetRequiredService<EfContext>();
+                    // 创建任务
+                    Type type = Type.GetType(item.FullClassName);
+                    var jobDetail = JobBuilder.Create(type)
+                                        .WithIdentity(jobKey)
+                                        .Build();
 
-                    var list = await _context.QuartzInfos.AsNoTracking().ToListAsync();
-                    foreach (var item in list)
-                    {
-                        // 创建触发器
-                        var trigger = TriggerBuilder.Create()
-                                            .WithIdentity(item.TriggerName, item.TriggerGroup)
-                                            .WithCronSchedule(item.CronExpression)
-                                            .Build();
+                    await _scheduler.ScheduleJob(jobDetail, trigger);
 
-                        // 创建任务
-                        Type type = Type.GetType(item.FullClassName);
-                        var jobDetail = JobBuilder.Create(type)
-                                            .WithIdentity(item.JobName, item.JobGroup)
-                                            .Build();
-
-                        await _scheduler.ScheduleJob(jobDetail, trigger);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("初始化数据库出错", ex.Message);
-                    throw ex;
+                    _logger.LogInformation($"{ item.Remark }加入调度任务");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogInformation("跳转Quartz调度...");
+                _logger.LogError("Quartz调度出错", ex.Message);
+                throw ex;
             }
             #endregion
 
