@@ -1,0 +1,236 @@
+2019-07-30 15:28:37.2124 Info Message Template Auto Format enabled
+2019-07-30 15:28:37.2124 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 15:28:37.2639 Info Adding target FileTarget(Name=allfile)
+2019-07-30 15:28:37.2639 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 15:28:37.2939 Info Found 45 configuration items
+2019-07-30 15:28:37.3046 Info Configuration initialized.
+2019-07-30 15:28:37.3046 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-30 15:28:37.3046 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 15:28:37.3193 Info Message Template Auto Format enabled
+2019-07-30 15:28:37.3193 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 15:28:37.3193 Info Adding target FileTarget(Name=allfile)
+2019-07-30 15:28:37.3193 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 15:28:37.3193 Info Closing old configuration.
+2019-07-30 15:28:37.3368 Info Found 45 configuration items
+2019-07-30 15:34:52.4411 Info Configuration file change detected! Reloading in 1000ms...
+2019-07-30 15:34:53.4472 Info Reloading configuration...
+2019-07-30 15:34:53.4472 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 15:34:53.4472 Info Message Template Auto Format enabled
+2019-07-30 15:34:53.4472 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 15:34:53.4472 Info Adding target FileTarget(Name=allfile)
+2019-07-30 15:34:53.4472 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 15:34:53.4472 Info Closing old configuration.
+2019-07-30 15:34:53.4472 Info Found 45 configuration items
+2019-07-30 15:35:10.0646 Info Configuration file change detected! Reloading in 1000ms...
+2019-07-30 15:35:11.0734 Info Reloading configuration...
+2019-07-30 15:35:11.0734 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 15:35:11.0734 Info Message Template Auto Format enabled
+2019-07-30 15:35:11.0734 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 15:35:11.0734 Info Adding target FileTarget(Name=allfile)
+2019-07-30 15:35:11.0734 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 15:35:11.0734 Info Closing old configuration.
+2019-07-30 15:35:11.0734 Info Found 45 configuration items
+2019-07-30 15:37:30.2386 Info Configuration file change detected! Reloading in 1000ms...
+2019-07-30 15:37:31.2467 Info Reloading configuration...
+2019-07-30 15:37:31.2467 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 15:37:31.2467 Info Message Template Auto Format enabled
+2019-07-30 15:37:31.2467 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 15:37:31.2467 Info Adding target FileTarget(Name=allfile)
+2019-07-30 15:37:31.2467 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 15:37:31.2467 Info Closing old configuration.
+2019-07-30 15:37:31.2467 Info Found 45 configuration items
+2019-07-30 15:43:18.6407 Info Configuration file change detected! Reloading in 1000ms...
+2019-07-30 15:43:19.6493 Info Reloading configuration...
+2019-07-30 15:43:19.6493 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 15:43:19.6493 Info Message Template Auto Format enabled
+2019-07-30 15:43:19.6493 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 15:43:19.6493 Info Adding target FileTarget(Name=allfile)
+2019-07-30 15:43:19.6493 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 15:43:19.6493 Info Closing old configuration.
+2019-07-30 15:43:19.6493 Info Found 45 configuration items
+2019-07-30 15:51:40.3050 Info Configuration file change detected! Reloading in 1000ms...
+2019-07-30 15:51:41.3074 Info Reloading configuration...
+2019-07-30 15:51:41.3074 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 15:51:41.3074 Info Message Template Auto Format enabled
+2019-07-30 15:51:41.3074 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 15:51:41.3074 Info Adding target FileTarget(Name=allfile)
+2019-07-30 15:51:41.3074 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 15:51:41.3074 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: ownFile-web
+2019-07-30 15:51:41.3074 Info Closing old configuration.
+2019-07-30 15:51:41.3074 Info Found 44 configuration items
+2019-07-30 15:51:42.3774 Info AppDomain Shutting down. Logger closing...
+2019-07-30 15:51:42.3809 Info Logger has been shut down.
+2019-07-30 15:51:55.7948 Info Message Template Auto Format enabled
+2019-07-30 15:51:55.7948 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 15:51:55.8451 Info Adding target FileTarget(Name=allfile)
+2019-07-30 15:51:55.8451 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 15:51:55.8639 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: ownFile-web
+2019-07-30 15:51:55.8774 Info Found 44 configuration items
+2019-07-30 15:51:55.8882 Info Configuration initialized.
+2019-07-30 15:51:55.8882 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-30 15:51:55.9023 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 15:51:55.9023 Info Message Template Auto Format enabled
+2019-07-30 15:51:55.9023 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 15:51:55.9023 Info Adding target FileTarget(Name=allfile)
+2019-07-30 15:51:55.9023 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 15:51:55.9023 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: ownFile-web
+2019-07-30 15:51:55.9023 Info Closing old configuration.
+2019-07-30 15:51:55.9195 Info Found 44 configuration items
+2019-07-30 16:08:37.2045 Info AppDomain Shutting down. Logger closing...
+2019-07-30 16:08:37.2120 Info Logger has been shut down.
+2019-07-30 16:08:50.5168 Info Message Template Auto Format enabled
+2019-07-30 16:08:50.5657 Info Adding target FileTarget(Name=allfile)
+2019-07-30 16:08:50.5657 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 16:08:50.5848 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: ownFile-web
+2019-07-30 16:08:50.5848 Info Found 44 configuration items
+2019-07-30 16:08:50.6081 Info Configuration initialized.
+2019-07-30 16:08:50.6081 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-30 16:08:50.6215 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 16:08:50.6215 Info Message Template Auto Format enabled
+2019-07-30 16:08:50.6215 Info Adding target FileTarget(Name=allfile)
+2019-07-30 16:08:50.6215 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 16:08:50.6215 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: ownFile-web
+2019-07-30 16:08:50.6215 Info Closing old configuration.
+2019-07-30 16:08:50.6386 Info Found 44 configuration items
+2019-07-30 16:09:04.0725 Info AppDomain Shutting down. Logger closing...
+2019-07-30 16:09:04.0725 Info Logger has been shut down.
+2019-07-30 16:09:13.9140 Info Message Template Auto Format enabled
+2019-07-30 16:09:13.9653 Info Adding target FileTarget(Name=allfile)
+2019-07-30 16:09:13.9653 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 16:09:13.9944 Info Found 45 configuration items
+2019-07-30 16:09:13.9944 Info Configuration initialized.
+2019-07-30 16:09:14.0108 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-30 16:09:14.0108 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 16:09:14.0108 Info Message Template Auto Format enabled
+2019-07-30 16:09:14.0108 Info Adding target FileTarget(Name=allfile)
+2019-07-30 16:09:14.0108 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 16:09:14.0216 Info Closing old configuration.
+2019-07-30 16:09:14.0216 Info Found 45 configuration items
+2019-07-30 22:29:11.5554 Info Configuration file change detected! Reloading in 1000ms...
+2019-07-30 22:29:12.5655 Info Reloading configuration...
+2019-07-30 22:29:12.5655 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 22:29:12.5655 Info Message Template Auto Format enabled
+2019-07-30 22:29:12.5655 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 22:29:12.5655 Info Adding target FileTarget(Name=ownFile-web)
+2019-07-30 22:29:12.5655 Info Closing old configuration.
+2019-07-30 22:29:12.5796 Info Found 24 configuration items
+2019-07-30 22:29:23.7137 Info Configuration file change detected! Reloading in 1000ms...
+2019-07-30 22:29:24.7191 Info Reloading configuration...
+2019-07-30 22:29:24.7191 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 22:29:24.7191 Info Message Template Auto Format enabled
+2019-07-30 22:29:24.7191 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 22:29:24.7191 Info Adding target FileTarget(Name=comLog)
+2019-07-30 22:29:24.7191 Info Closing old configuration.
+2019-07-30 22:29:24.7191 Info Found 24 configuration items
+2019-07-30 22:29:51.2967 Info AppDomain Shutting down. Logger closing...
+2019-07-30 22:29:51.2967 Info Logger has been shut down.
+2019-07-30 22:30:01.5051 Info Message Template Auto Format enabled
+2019-07-30 22:30:01.5051 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 22:30:01.5558 Info Adding target FileTarget(Name=comLog)
+2019-07-30 22:30:01.5852 Info Found 24 configuration items
+2019-07-30 22:30:01.5952 Info Configuration initialized.
+2019-07-30 22:30:01.5952 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-30 22:30:01.6090 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-30 22:30:01.6090 Info Message Template Auto Format enabled
+2019-07-30 22:30:01.6090 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-30 22:30:01.6090 Info Adding target FileTarget(Name=comLog)
+2019-07-30 22:30:01.6090 Info Closing old configuration.
+2019-07-30 22:30:01.6253 Info Found 24 configuration items
+2019-07-30 22:31:00.2634 Info AppDomain Shutting down. Logger closing...
+2019-07-30 22:31:00.2713 Info Logger has been shut down.
+2019-07-31 09:51:10.9448 Info Message Template Auto Format enabled
+2019-07-31 09:51:10.9689 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 09:51:11.0126 Info Adding target FileTarget(Name=comLog)
+2019-07-31 09:51:11.0391 Info Found 24 configuration items
+2019-07-31 09:51:11.0391 Info Configuration initialized.
+2019-07-31 09:51:11.0536 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-31 09:51:11.0536 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-31 09:51:11.0536 Info Message Template Auto Format enabled
+2019-07-31 09:51:11.0536 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 09:51:11.0536 Info Adding target FileTarget(Name=comLog)
+2019-07-31 09:51:11.0536 Info Closing old configuration.
+2019-07-31 09:51:11.0780 Info Found 24 configuration items
+2019-07-31 09:58:20.5424 Info Message Template Auto Format enabled
+2019-07-31 09:58:20.5424 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 09:58:20.5933 Info Adding target FileTarget(Name=allfile)
+2019-07-31 09:58:20.5933 Info Adding target FileTarget(Name=comLog)
+2019-07-31 09:58:20.6109 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: allfile
+2019-07-31 09:58:20.6235 Info Found 44 configuration items
+2019-07-31 09:58:20.6334 Info Configuration initialized.
+2019-07-31 09:58:20.6334 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-31 09:58:20.6334 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-31 09:58:20.6334 Info Message Template Auto Format enabled
+2019-07-31 09:58:20.6472 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 09:58:20.6472 Info Adding target FileTarget(Name=allfile)
+2019-07-31 09:58:20.6472 Info Adding target FileTarget(Name=comLog)
+2019-07-31 09:58:20.6472 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: allfile
+2019-07-31 09:58:20.6472 Info Closing old configuration.
+2019-07-31 09:58:20.6637 Info Found 44 configuration items
+2019-07-31 09:58:39.1218 Info Configuration file change detected! Reloading in 1000ms...
+2019-07-31 09:58:40.1253 Info Reloading configuration...
+2019-07-31 09:58:40.1253 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-31 09:58:40.1253 Info Message Template Auto Format enabled
+2019-07-31 09:58:40.1253 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 09:58:40.1253 Info Adding target FileTarget(Name=allfile)
+2019-07-31 09:58:40.1253 Info Adding target FileTarget(Name=comLog)
+2019-07-31 09:58:40.1253 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: allfile
+2019-07-31 09:58:40.1312 Info Closing old configuration.
+2019-07-31 09:58:40.1312 Info Found 44 configuration items
+2019-07-31 09:59:38.8530 Info AppDomain Shutting down. Logger closing...
+2019-07-31 09:59:38.8530 Info Logger has been shut down.
+2019-07-31 09:59:49.2633 Info Message Template Auto Format enabled
+2019-07-31 09:59:49.2633 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 09:59:49.3222 Info Adding target FileTarget(Name=comLog)
+2019-07-31 09:59:49.3492 Info Found 24 configuration items
+2019-07-31 09:59:49.3593 Info Configuration initialized.
+2019-07-31 09:59:49.3593 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-31 09:59:49.3736 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-31 09:59:49.3736 Info Message Template Auto Format enabled
+2019-07-31 09:59:49.3736 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 09:59:49.3736 Info Adding target FileTarget(Name=comLog)
+2019-07-31 09:59:49.3736 Info Closing old configuration.
+2019-07-31 09:59:49.3905 Info Found 24 configuration items
+2019-07-31 10:48:53.7118 Info AppDomain Shutting down. Logger closing...
+2019-07-31 10:48:53.7118 Info Logger has been shut down.
+2019-07-31 10:48:58.8615 Info Message Template Auto Format enabled
+2019-07-31 10:48:58.8664 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 10:48:58.9105 Info Adding target FileTarget(Name=comLog)
+2019-07-31 10:48:58.9369 Info Found 24 configuration items
+2019-07-31 10:48:58.9464 Info Configuration initialized.
+2019-07-31 10:48:58.9464 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-31 10:48:58.9595 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-31 10:48:58.9595 Info Message Template Auto Format enabled
+2019-07-31 10:48:58.9595 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 10:48:58.9595 Info Adding target FileTarget(Name=comLog)
+2019-07-31 10:48:58.9595 Info Closing old configuration.
+2019-07-31 10:48:58.9765 Info Found 24 configuration items
+2019-07-31 14:55:55.7316 Info AppDomain Shutting down. Logger closing...
+2019-07-31 14:55:55.7316 Info Logger has been shut down.
+2019-07-31 15:09:27.3958 Info Message Template Auto Format enabled
+2019-07-31 15:09:27.4010 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 15:09:27.4454 Info Adding target FileTarget(Name=comLog)
+2019-07-31 15:09:27.4721 Info Found 24 configuration items
+2019-07-31 15:09:27.4817 Info Configuration initialized.
+2019-07-31 15:09:27.4817 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-31 15:09:27.4952 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-31 15:09:27.4952 Info Message Template Auto Format enabled
+2019-07-31 15:09:27.4952 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 15:09:27.4952 Info Adding target FileTarget(Name=comLog)
+2019-07-31 15:09:27.4952 Info Closing old configuration.
+2019-07-31 15:09:27.5119 Info Found 24 configuration items
+2019-07-31 15:11:15.5472 Info AppDomain Shutting down. Logger closing...
+2019-07-31 15:11:15.5543 Info Logger has been shut down.
+2019-07-31 15:11:21.4466 Info Message Template Auto Format enabled
+2019-07-31 15:11:21.4466 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 15:11:21.4967 Info Adding target FileTarget(Name=comLog)
+2019-07-31 15:11:21.5238 Info Found 24 configuration items
+2019-07-31 15:11:21.5238 Info Configuration initialized.
+2019-07-31 15:11:21.5418 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.6.10303. Product version: 4.6.6.
+2019-07-31 15:11:21.5418 Info Configuring from an XML element in E:\Project\Github\dnc.spider\dnc.spider.webapi\nlog.config...
+2019-07-31 15:11:21.5418 Info Message Template Auto Format enabled
+2019-07-31 15:11:21.5418 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-31 15:11:21.5418 Info Adding target FileTarget(Name=comLog)
+2019-07-31 15:11:21.5418 Info Closing old configuration.
+2019-07-31 15:11:21.5654 Info Found 24 configuration items
+2019-07-31 15:12:00.8781 Info AppDomain Shutting down. Logger closing...
+2019-07-31 15:12:00.8851 Info Logger has been shut down.

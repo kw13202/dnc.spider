@@ -19,6 +19,8 @@ using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Quartz.Spi;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace dnc.spider.webapi
 {
@@ -106,6 +108,7 @@ namespace dnc.spider.webapi
                 x.DefaultRequestHeaders.Add("Cache-Control", "max-age=0");
                 x.DefaultRequestHeaders.Add("Connection", "keep-alive");
                 x.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0");
+                x.Timeout = TimeSpan.FromSeconds(20);
             });
 
             // 添加自定义的HostedService
@@ -113,7 +116,7 @@ namespace dnc.spider.webapi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
 
             if (env.IsDevelopment())
@@ -131,6 +134,11 @@ namespace dnc.spider.webapi
             });
             // 使用跨域，必须在UseMvc之前
             app.UseCors();
+            //使用NLog作为日志记录工具
+            loggerFactory.AddNLog();
+            //引入Nlog配置文件
+            env.ConfigureNLog("nlog.config");
+
             // 使用MVC
             app.UseMvc();
         }

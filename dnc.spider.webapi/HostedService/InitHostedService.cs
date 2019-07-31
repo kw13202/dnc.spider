@@ -63,60 +63,26 @@ namespace dnc.spider.webapi
 
             var scope = _scopeFactory.CreateScope();
 
-            #region 初始化数据库
-            _logger.LogInformation("初始化数据库开始");
+            #region EF自动迁移
+            _logger.LogDebug("检查EF是否需要迁移");
             try
             {
                 var _context = scope.ServiceProvider.GetRequiredService<EfContext>();
-                //await _context.Database.EnsureDeletedAsync();
-                if (await _context.Database.EnsureCreatedAsync())
+                // 判断是否有待迁移
+                if (_context.Database.GetPendingMigrations().Any())
                 {
-                    if (!_context.QuartzInfos.Any())
-                    {
-                        _context.Add(new QuartzInfo
-                        {
-                            Guid = Guid.NewGuid().ToString(),
-                            TriggerGroup = "TriggerGroup1",
-                            TriggerName = "TriggerName1",
-                            CronExpression = "0 0/1 * * * ? ",//每分钟执行一次
-                            FullClassName = "dnc.spider.webapi.SpiderJob",
-                            JobGroup = "JobGroup1",
-                            JobName = "JobName1",
-                            Remark = "京东爬虫",
-                            Enabled = false,
-                        });
-                        _context.Add(new QuartzInfo
-                        {
-                            Guid = Guid.NewGuid().ToString(),
-                            TriggerGroup = "TriggerGroup2",
-                            TriggerName = "TriggerName2",
-                            CronExpression = "0 0 3 * * ? ",// 每天3点执行
-                            FullClassName = "dnc.spider.webapi.ProxyJob",
-                            JobGroup = "JobGroup2",
-                            JobName = "JobName2",
-                            Remark = "代理爬虫",
-                            Enabled = true,
-                        });
-                        await _context.SaveChangesAsync();
-                    }
-                    if (!_context.Goods.Any())
-                    {
-                        var goodList = new List<Goods>()
-                        {
-                            new Goods(){ GoodsCode = "7254027"},
-                            new Goods(){ GoodsCode = "5008395"},
-                            new Goods(){ GoodsCode = "830486"},
-                        };
-                        _context.Goods.AddRange(goodList);
-                        _context.SaveChanges();
-                    }
+                    _logger.LogDebug("执行EF迁移");
+                    _context.Database.Migrate();
+                    _logger.LogDebug("执行EF迁移完毕");
+                } 
+                else
+                {
+                    _logger.LogDebug("无需执行EF迁移");
                 }
-
-                _logger.LogInformation("初始化数据库结束");
             }
             catch (Exception ex)
             {
-                _logger.LogError("初始化数据库出错", ex.Message);
+                _logger.LogError("执行EF迁移出错", ex.Message);
                 throw ex;
             }
             #endregion
@@ -162,7 +128,7 @@ namespace dnc.spider.webapi
             //{
             //    _logger.LogInformation("跳过Quartz调度...");
             //}
-            _logger.LogInformation("开始Quartz调度...");
+            _logger.LogDebug("开始Quartz调度...");
             try
             {
                 // 开启调度器
@@ -171,24 +137,31 @@ namespace dnc.spider.webapi
                 var _context = scope.ServiceProvider.GetRequiredService<EfContext>();
 
                 var list = await _context.QuartzInfos.AsNoTracking().Where(x => x.Enabled).ToListAsync();
-                foreach (var item in list)
+                if(list != null && list.Count > 0)
                 {
-                    var jobKey = new JobKey(item.JobName, item.JobGroup);
-                    // 创建触发器
-                    var trigger = TriggerBuilder.Create()
-                                        .WithIdentity(item.TriggerName, item.TriggerGroup)
-                                        .WithCronSchedule(item.CronExpression)
-                                        .Build();
+                    foreach (var item in list)
+                    {
+                        var jobKey = new JobKey(item.JobName, item.JobGroup);
+                        // 创建触发器
+                        var trigger = TriggerBuilder.Create()
+                                            .WithIdentity(item.TriggerName, item.TriggerGroup)
+                                            .WithCronSchedule(item.CronExpression)
+                                            .Build();
 
-                    // 创建任务
-                    Type type = Type.GetType(item.FullClassName);
-                    var jobDetail = JobBuilder.Create(type)
-                                        .WithIdentity(jobKey)
-                                        .Build();
+                        // 创建任务
+                        Type type = Type.GetType(item.FullClassName);
+                        var jobDetail = JobBuilder.Create(type)
+                                            .WithIdentity(jobKey)
+                                            .Build();
 
-                    await _scheduler.ScheduleJob(jobDetail, trigger);
+                        await _scheduler.ScheduleJob(jobDetail, trigger);
 
-                    _logger.LogInformation($"{ item.Remark }加入调度任务");
+                        _logger.LogDebug($"{ item.Remark }加入调度任务");
+                    }
+                }
+                else
+                {
+                    _logger.LogDebug($"没有Quartz调度任务");
                 }
             }
             catch (Exception ex)
