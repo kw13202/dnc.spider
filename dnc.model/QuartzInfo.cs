@@ -12,7 +12,7 @@ namespace dnc.model
         /// <summary>
         /// 定时任务Id
         /// </summary>
-        public string Guid { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// 触发器分组名
         /// </summary>

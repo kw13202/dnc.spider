@@ -15,7 +15,7 @@ namespace dnc.efcontext.Map
             builder.ToTable("QuartzInfos");
 
             //主键
-            builder.HasKey(x => x.Guid);
+            builder.HasKey(x => x.Id);
 
             //字段
             builder.Property(x => x.TriggerGroup).HasColumnType("nvarchar(100)");
