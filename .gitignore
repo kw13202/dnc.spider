@@ -329,7 +329,10 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 
-# Nlog�ļ�
+# Nlog�ļ�
 [Ll]og/
 internal-nlog.txt
+
+# vscode 调试文件夹
+.vscode/
 
