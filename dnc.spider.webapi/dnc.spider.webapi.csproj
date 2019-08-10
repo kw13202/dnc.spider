@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>E:\Project\Git\GitHub\dnc.spider\dnc.spider.webapi\dnc.spider.webapi.xml</DocumentationFile>
+    <DocumentationFile>.\dnc.spider.webapi.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="internal-nlog.txt" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />

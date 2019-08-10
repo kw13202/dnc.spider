@@ -26,13 +26,13 @@ WORKDIR /app/dnc.spider.webapi
 RUN dotnet publish -c Release -o out
 
 
-#
+# 使用2.2运行时作为创建环境
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
 # 使用app文件夹作为目录
 WORKDIR /app
-#
+# 从build环境中拷贝发布文件夹到app目录
 COPY --from=build /app/dnc.spider.webapi/out ./
-#
+# 执行命令
 ENTRYPOINT [ "dotnet",  "dnc.spider.webapi.dll" ]
 
 

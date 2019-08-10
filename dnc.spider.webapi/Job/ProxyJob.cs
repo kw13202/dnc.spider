@@ -69,7 +69,6 @@ namespace dnc.spider.webapi
                         var parser = new HtmlParserHelper(content);
                         var pagesList = parser.GetTextList("#listnav a");
                         var pages = pagesList.Last();
-                        //var list = parser.QuerySelectorAll("#list tbody tr");
                         if (Int32.TryParse(pages, out int result))
                         {
                             var taskQueue = new ConcurrentQueue<int>();
@@ -128,22 +127,19 @@ namespace dnc.spider.webapi
                     {
                         _logger.LogError($"code:{ rsp.StatusCode },content:{ content }");
                     }
-                    //var parser = new HtmlParserHelper(rsp.Content);
-
-
                 }
                 catch (Exception ex)
                 {
-
-                    throw;
+                    _logger.LogError("[{0:yyyy-MM-dd hh:mm:ss:ffffff}]ProxyJob任务出错！", ex);
+                    throw ex;
                 }
                 finally
                 {
-
+                    CacheManager.IsProxyJobRunning = false;
                 }
             }
 
-            CacheManager.IsProxyJobRunning = false;
+            
             _logger.LogInformation(string.Format("[{0:yyyy-MM-dd hh:mm:ss:ffffff}]ProxyJob任务执行完毕！", DateTime.Now));
         }
     }

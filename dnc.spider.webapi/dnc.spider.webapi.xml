@@ -4,15 +4,23 @@
         <name>dnc.spider.webapi</name>
     </assembly>
     <members>
-        <member name="T:dnc.spider.webapi.QuartzFactory">
+        <member name="M:dnc.spider.webapi.Controllers.GoodsController.GetList">
             <summary>
-            
+            获取商品列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:dnc.spider.webapi.ProxyJob">
+            <summary>
+            代理类定时任务
             </summary>
         </member>
-        <member name="M:dnc.spider.webapi.QuartzFactory.StartSpider">
+        <member name="M:dnc.spider.webapi.ProxyJob.Execute(Quartz.IJobExecutionContext)">
             <summary>
             
             </summary>
+            <param name="context"></param>
+            <returns></returns>
         </member>
         <member name="T:dnc.spider.webapi.SpiderJob">
             <summary>
@@ -25,6 +33,12 @@
             </summary>
             <param name="context"></param>
             <returns></returns>
+        </member>
+        <member name="M:dnc.spider.webapi.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="configuration"></param>
         </member>
     </members>
 </doc>

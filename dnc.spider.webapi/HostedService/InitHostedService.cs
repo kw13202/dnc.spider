@@ -156,7 +156,7 @@ namespace dnc.spider.webapi
 
                         await _scheduler.ScheduleJob(jobDetail, trigger);
 
-                        _logger.LogDebug($"{ item.Remark }加入调度任务");
+                        _logger.LogDebug($"{ item.Remark }[{ item.CronExpression }]加入调度任务");
                     }
                 }
                 else

@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Http;
 using Quartz.Spi;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace dnc.spider.webapi
 {
@@ -131,6 +132,7 @@ namespace dnc.spider.webapi
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                //c.RoutePrefix = string.Empty;
             });
             // 使用跨域，必须在UseMvc之前
             app.UseCors();
@@ -138,6 +140,12 @@ namespace dnc.spider.webapi
             loggerFactory.AddNLog();
             //引入Nlog配置文件
             env.ConfigureNLog("nlog.config");
+
+            // 设置重定向
+            var option = new RewriteOptions();
+            option.AddRedirect("^$", "swagger");
+            option.AddRedirect("^index.html$", "swagger");
+            app.UseRewriter(option);
 
             // 使用MVC
             app.UseMvc();
