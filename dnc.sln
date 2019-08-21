@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnc.spider", "dnc.spider\dnc.spider.csproj", "{0D5223C9-EE96-42DA-BF1D-73C0389549EC}"
 EndProject
@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnc.spider.webapi", "dnc.sp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnc.spider.helper", "dnc.spider.helper\dnc.spider.helper.csproj", "{31FA66BF-67C2-4EEB-B95E-D2DFCA9A6CE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnc.model", "dnc.model\dnc.model.csproj", "{87298DBE-4D35-4400-AC66-7B9CCCB7F378}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnc.model", "dnc.model\dnc.model.csproj", "{87298DBE-4D35-4400-AC66-7B9CCCB7F378}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnc.efcontext", "dnc.efcontext\dnc.efcontext.csproj", "{BA4F6A88-30F7-41ED-8139-6E310BE8CB31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnc.efcontext", "dnc.efcontext\dnc.efcontext.csproj", "{BA4F6A88-30F7-41ED-8139-6E310BE8CB31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnc.viewmodel", "dnc.viewmodel\dnc.viewmodel.csproj", "{931037CF-33CC-460B-9F31-815B6C908C78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{BA4F6A88-30F7-41ED-8139-6E310BE8CB31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA4F6A88-30F7-41ED-8139-6E310BE8CB31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA4F6A88-30F7-41ED-8139-6E310BE8CB31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{931037CF-33CC-460B-9F31-815B6C908C78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{931037CF-33CC-460B-9F31-815B6C908C78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{931037CF-33CC-460B-9F31-815B6C908C78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{931037CF-33CC-460B-9F31-815B6C908C78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

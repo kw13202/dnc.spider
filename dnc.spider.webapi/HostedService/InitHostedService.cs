@@ -88,46 +88,6 @@ namespace dnc.spider.webapi
             #endregion
 
             #region Quartz调度
-            //if (CacheManager.browser != null)
-            //{
-            //    _logger.LogInformation("开始Quartz调度...");
-            //    try
-            //    {
-            //        // 开启调度器
-            //        await _scheduler.Start(stoppingToken);
-
-            //        var _context = scope.ServiceProvider.GetRequiredService<EfContext>();
-
-            //        var list = await _context.QuartzInfos.AsNoTracking().Where(x => x.Enabled).ToListAsync();
-            //        foreach (var item in list)
-            //        {
-            //            var jobKey = new JobKey(item.JobName, item.JobGroup);
-            //            // 创建触发器
-            //            var trigger = TriggerBuilder.Create()
-            //                                .WithIdentity(item.TriggerName, item.TriggerGroup)
-            //                                .WithCronSchedule(item.CronExpression)
-            //                                .Build();
-
-            //            // 创建任务
-            //            Type type = Type.GetType(item.FullClassName);
-            //            var jobDetail = JobBuilder.Create(type)
-            //                                .WithIdentity(jobKey)
-            //                                .Build();
-
-            //            await _scheduler.ScheduleJob(jobDetail, trigger);
-
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        _logger.LogError("Quartz调度出错", ex.Message);
-            //        throw ex;
-            //    }
-            //}
-            //else
-            //{
-            //    _logger.LogInformation("跳过Quartz调度...");
-            //}
             _logger.LogDebug("开始Quartz调度...");
             try
             {

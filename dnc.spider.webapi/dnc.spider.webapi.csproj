@@ -37,6 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\dnc.efcontext\dnc.efcontext.csproj" />
     <ProjectReference Include="..\dnc.spider.helper\dnc.spider.helper.csproj" />
+    <ProjectReference Include="..\dnc.viewmodel\dnc.viewmodel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

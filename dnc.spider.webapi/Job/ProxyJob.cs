@@ -69,8 +69,41 @@ namespace dnc.spider.webapi
                         var parser = new HtmlParserHelper(content);
                         var pagesList = parser.GetTextList("#listnav a");
                         var pages = pagesList.Last();
-                        if (Int32.TryParse(pages, out int result))
+                        if (Int32.TryParse(pages, out int tempPage))
                         {
+                            int result = 0;
+                            // 根据页数判断是否需要执行
+                            var configPage = await _context.SysConfig.FirstOrDefaultAsync(x => x.Code == "001");
+                            if (configPage != null)
+                            {
+                                int prePage = 0;
+                                if (!string.IsNullOrWhiteSpace(configPage.Value))
+                                {
+                                    if (Int32.TryParse(configPage.Value, out prePage))
+                                    {
+                                        if (tempPage <= prePage)
+                                        {
+                                            // 页数不变，不需要执行
+                                            _logger.LogDebug($"页数不变，不需要执行");
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            result = tempPage - prePage + 1;
+                                            configPage.Value = tempPage.ToString();
+                                            await _context.SaveChangesAsync();
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    configPage.Value = tempPage.ToString();
+                                    await _context.SaveChangesAsync();
+                                }
+
+                            }
+
+
                             var taskQueue = new ConcurrentQueue<int>();
                             for (int i = 1; i <= result; i++)
                             {
@@ -111,13 +144,14 @@ namespace dnc.spider.webapi
                                             {
                                                 _context.Proxy.AddRange(addList);
                                                 await _context.SaveChangesAsync();
+                                                proxyList.AddRange(addList);
                                             }
                                         }
                                         else
                                         {
                                             _logger.LogDebug($"网站返回错误");
                                         }
-                                        await Task.Delay(TimeSpan.FromSeconds(10));
+                                        await Task.Delay(TimeSpan.FromSeconds(5));
                                     }
                                 }
                             }

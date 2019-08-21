@@ -42,5 +42,7 @@ namespace dnc.efcontext
         public DbSet<HisPrice> HisPrices { get; set; }
         public DbSet<QuartzInfo> QuartzInfos { get; set; }
         public DbSet<Proxy> Proxy { get; set; }
+        public DbSet<SysConfig> SysConfig { get; set; }
+
     }
 }
