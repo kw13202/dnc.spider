@@ -124,6 +124,7 @@ namespace dnc.spider.webapi
             {
                 app.UseDeveloperExceptionPage();
             }
+            
             // 使用静态文件
             app.UseStaticFiles();
             // 使用Swagger
@@ -141,11 +142,14 @@ namespace dnc.spider.webapi
             //引入Nlog配置文件
             env.ConfigureNLog("nlog.config");
 
+            app.UseReq();
+
             // 设置重定向
             var option = new RewriteOptions();
             option.AddRedirect("^$", "swagger");
             option.AddRedirect("^index.html$", "swagger");
             app.UseRewriter(option);
+            
 
             // 使用MVC
             app.UseMvc();
